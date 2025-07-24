@@ -1,18 +1,26 @@
+import os
+import logging
 import aiohttp
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import ContentType
-from aiogram.utils import executor
-import logging
-import os
+from aiogram.enums import ContentType
+from aiogram.types import Message
+from aiogram.client.session.aiohttp import AiohttpSession
+from aiogram.utils.markdown import hlink
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram import Router
+from aiogram import F
+from aiogram.runner import run_polling
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("7655555394:AAGLTyM7rrXR3pb__r4IfH6zhi4hfCdNoa4")
 
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(storage=MemoryStorage())
+router = Router()
+dp.include_router(router)
+
 logging.basicConfig(level=logging.INFO)
 
-@dp.message_handler(content_types=ContentType.PHOTO)
-async def handle_photo(message: types.Message):
+@router.message(F.photo)
+async def handle_photo(message: Message, bot: Bot):
     photo = message.photo[-1]
     file = await bot.get_file(photo.file_id)
     file_url = f"https://api.telegram.org/file/bot{BOT_TOKEN}/{file.file_path}"
@@ -38,4 +46,5 @@ async def handle_photo(message: types.Message):
         await message.reply(f"✅ Готово!\n{telegraph_url}")
 
 if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=True)
+    bot = Bot(token=BOT_TOKEN, session=AiohttpSession())
+    run_polling(dp, bot=bot)
