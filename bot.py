@@ -11,7 +11,10 @@ from aiogram import Router
 from aiogram import F
 from aiogram.runner import run_polling
 
-BOT_TOKEN = os.getenv("7655555394:AAGLTyM7rrXR3pb__r4IfH6zhi4hfCdNoa4")
+BOT_TOKEN = "7655555394:AAGLTyM7rrXR3pb__r4IfH6zhi4hfCdNoa4"
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher()
+
 
 dp = Dispatcher(storage=MemoryStorage())
 router = Router()
